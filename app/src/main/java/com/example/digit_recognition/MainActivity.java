@@ -1,31 +1,66 @@
 package com.example.digit_recognition;
 
+import android.app.Activity;
+import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
+import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ImageView;
+
 
 public class MainActivity extends AppCompatActivity {
+
+    private static final int REQUEST_IMAGE_CAPTURE = 1;
+    private ImageView imageView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         Toolbar toolbar = findViewById(R.id.toolbar);
+        /* Photo */
+        imageView = findViewById(R.id.photo);
+
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+//        FloatingActionButton fab = findViewById(R.id.fab);
+//        fab.setOnClickListener(new View.OnClickListener() { onClick
+//        });
+    }
+
+
+    public void takePicture(View view) {
+        /*
+            Intent: abstract description of an operation to be performed
+            communicate with different applications
+        */
+        Intent imageTakeIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        /* Check if there is ANY activity that can resolve this intent */
+        if (imageTakeIntent.resolveActivity(getPackageManager()) != null) {
+            /* Start Activity */
+            startActivityForResult(imageTakeIntent, REQUEST_IMAGE_CAPTURE);
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        /* Camera Case && Operation was successful */
+        if ((requestCode == REQUEST_IMAGE_CAPTURE) && (resultCode == Activity.RESULT_OK)) {
+            /* Android Camera application encodes the photo as a small Bitmap
+               in the extras, under the key "data" */
+            Bundle extras = data.getExtras();
+            Bitmap imageBitmap = (Bitmap) extras.get("data");
+            /* Assign bitmap to view aka Display the photo */
+            imageView.setImageBitmap(imageBitmap);
+        }
     }
 
     @Override
@@ -48,5 +83,9 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public void hello(View v) {
+        Log.d("TEST", "Hello World!");
     }
 }

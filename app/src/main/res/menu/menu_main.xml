@@ -7,4 +7,16 @@
         android:orderInCategory="100"
         android:title="@string/action_settings"
         app:showAsAction="never" />
+
+    <item
+        android:id="@+id/s1"
+        android:orderInCategory="100"
+        android:title="John Papas"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/s2"
+        android:orderInCategory="100"
+        android:title="Mary the kid"
+        app:showAsAction="never" />
 </menu>
